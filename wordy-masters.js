@@ -6,6 +6,7 @@ const ROUNDS = 6;
 async function init() {
     let currentGuess = ''; //Has to be let because we are re-assigning it over and over, const doesn't work
     let currentRow = 0;
+    let isLoading = true;
 
     //Gets word of the Day
     //res is short for response, add ?random=1 for a new word each time istead of just word of the day
@@ -15,6 +16,7 @@ async function init() {
     const wordParts = word.split("");
     let done = false;
     setLoading(false);
+    isLoading = false;
 
     console.log(word)
     
@@ -40,16 +42,7 @@ async function init() {
             return;
         } 
 
-        if(currentGuess === word) {
-            //win
-            alert('You Win!');
-            done = true;
-            return;
-        }
-
         // TODO validate the word
-
-        // TODO do all the marking as "correct" "close" or "wrong"
 
         const guessParts = currentGuess.split("");
         const map = makeMap(wordParts);
@@ -75,21 +68,34 @@ async function init() {
         }
 
         currentRow++;
-        currentGuess = '';
 
-        if (currentRow === ROUNDS) {
+        if(currentGuess === word) {
+            //win
+            alert('You Win!');
+            done = true;
+            return;
+        } else if (currentRow === ROUNDS) {
             alert(`you lose, the word was ${word}`);
             done = true;
         }
 
-        function backspace() {
-            currentGuess = currentGuess.substring(0, currentGuess.length - 1);
-            letters[ANSWER_LENGTH * currentRow + currentGuess.length].innerText = "";
-        }
+        currentGuess = '';
 
     }
+
+    function backspace() {
+        currentGuess = currentGuess.substring(0, currentGuess.length - 1);
+        letters[ANSWER_LENGTH * currentRow + currentGuess.length].innerText = "";
+    }
+
 //dont need name below, but helps with debugging later on
     document.addEventListener('keydown', function handleKeyPress(event) {
+        if (done || isLoading) {
+            // do nothing
+            return;
+        }
+
+
         const action = event.key;
 
         if (action === 'Enter') {
