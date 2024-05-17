@@ -4,7 +4,7 @@ const ANSWER_LENGTH = 5; //in screaming case because it never changes
 
 async function init() {
     let currentGuess = ''; //Has to be let because we are re-assigning it over and over, const doesn't work
-
+    let currentRow = 0;
 
     function addLetter (letter) {
         if (currentGuess.length < ANSWER_LENGTH) {
@@ -18,7 +18,19 @@ async function init() {
             //string.length == 5; 
             //string.charAt(0) = 'B'
             //string.charAt(4); = 'N' so its length - 1
-        letters[currentGuess.length - 1].innerText = letter;
+        letters[ANSWER_LENGTH * currentRow + currentGuess.length - 1].innerText = letter;
+    }
+
+    async function commit() {
+        if (currentGuess.length !== ANSWER_LENGTH) {
+            //Do Nothing
+            return;
+        } 
+
+        currentRow++;
+        currentGuess = '';
+
+
     }
 //dont need name below, but helps with debugging later on
     document.addEventListener('keydown', function handleKeyPress(event) {
