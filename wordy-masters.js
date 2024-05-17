@@ -6,10 +6,12 @@ async function init() {
     let currentGuess = ''; //Has to be let because we are re-assigning it over and over, const doesn't work
     let currentRow = 0;
 
+    //Gets word of the Day
     //res is short for response, add ?random=1 for a new word each time istead of just word of the day
     const res = await fetch("https://words.dev-apis.com/word-of-the-day"); 
     const resObj = await res.json();
     const word = resObj.word.toUpperCase();
+    setLoading(false);
 
     console.log(word)
     
@@ -70,4 +72,7 @@ function isLetter(letter) {
     return /^[a-zA-Z]$/.test(letter);
 }
 
+function setLoading(isLoading) {
+    loadingDiv.classList.toggle('show', isLoading);
+}
 init();
