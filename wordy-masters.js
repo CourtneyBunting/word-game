@@ -1,6 +1,7 @@
 const letters = document.querySelectorAll('.gameboard-letter');
 const loadingDiv = document.querySelector('.info-bar');
 const ANSWER_LENGTH = 5; //in screaming case because it never changes
+const ROUNDS = 6;
 
 async function init() {
     let currentGuess = ''; //Has to be let because we are re-assigning it over and over, const doesn't work
@@ -12,6 +13,7 @@ async function init() {
     const resObj = await res.json();
     const word = resObj.word.toUpperCase();
     const wordParts = word.split("");
+    let done = false;
     setLoading(false);
 
     console.log(word)
@@ -37,6 +39,13 @@ async function init() {
             //Do Nothing
             return;
         } 
+
+        if(currentGuess === word) {
+            //win
+            alert('You Win!');
+            done = true;
+            return;
+        }
 
         // TODO validate the word
 
@@ -65,10 +74,13 @@ async function init() {
             }
         }
 
-        // TODO did they win or lose?
-
         currentRow++;
         currentGuess = '';
+
+        if (currentRow === ROUNDS) {
+            alert(`you lose, the word was ${word}`);
+            done = true;
+        }
 
         function backspace() {
             currentGuess = currentGuess.substring(0, currentGuess.length - 1);
