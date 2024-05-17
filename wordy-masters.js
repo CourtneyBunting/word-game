@@ -27,9 +27,19 @@ async function init() {
             return;
         } 
 
+        // TODO validate the word
+
+        // TODO do all the marking as "correct" "close" or "wrong"
+
+        // TODO did they win or lose?
+
         currentRow++;
         currentGuess = '';
 
+        function backspace() {
+            currentGuess = currentGuess.substring(0, currentGuess.length - 1);
+            letters[ANSWER_LENGTH * currentRow + currentGuess.length].innerText = "";
+        }
 
     }
 //dont need name below, but helps with debugging later on
